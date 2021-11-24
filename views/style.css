@@ -1,0 +1,97 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.navbar {
+    position: sticky;
+    top: 0;
+    height: 60px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background:burlywood;
+
+}
+
+.navbar-center {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+.logo {
+    border: none;
+    font-size: 2.5rem;
+    background:burlywood;
+    font-style:oblique;
+    font-variant:small-caps;
+}
+
+
+.frontPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.Banner {
+    text-align: center;
+    background-color:rgba(255, 166, 0, 0.425);
+    padding: 3rem;
+    display: inline-block;
+}
+
+.BannerTitle {
+    font-size: 3rem;
+    text-transform:capitalize;
+    margin-bottom: 3rem;
+}
+
+.BannerUndertitle {
+    font-size: 1.3rem;
+    text-transform:capitalize;
+    margin-bottom: none;
+
+}
+
+.bodyTekst{
+    font-size: 1rem;
+    text-transform:inherit;
+    margin-bottom: 2rem;
+    padding: 3rem;
+    line-height: 3rem;
+    text-align: center;
+}
+
+.produkter {
+    padding: 4rem 0rem;
+}
+
+
+.sectionTitle {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 5rem;
+}
+
+.produkter-center {
+    width: 90vw;
+    margin: 5px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-column-gap: 4rem;
+    grid-row-gap: 2rem;
+}
+
+.img-container {
+    margin: 2rem;
+    border: none;
+}
+.img-container:hover .produkt1-img {
+    opacity: 0.5;
+
+}

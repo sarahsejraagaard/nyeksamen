@@ -13,8 +13,8 @@ document.getElementById("login").addEventListener("click", () => {
         "kodeord": kodeord
     }
 
-    //Bemærk at vi her skriver vores login-endpoint istedet for opret-endpoint, som vi gjorde i registrere.js koden:
-    fetch("/login", {
+        //vi går ind og tager (fetcher) i det nedenstående spor, altså der hvor man logger ind:
+        fetch("/login", {
         method: "POST", 
         headers: {
             "Content-Type": "application/json", 

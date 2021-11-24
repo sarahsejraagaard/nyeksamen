@@ -83,4 +83,15 @@ app.post("/login", (req, res) => {
     res.status(400).end();
 });
 
-app.post("/")
+//vi laver et endpoint til en post request til at oprette en bruger
+app.post("/opret", (req, res) => {
+    const user= (
+        email= req.body.email, 
+        kodeord= req.body.kodeord, 
+        navn= req.boby.navn
+    )
+    //hvis de indtastede informationer passer til en bruger, opretter vi en session.
+    req.session.email = req.body.email;
+                
+    res.redirect('/');
+});

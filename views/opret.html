@@ -4,19 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Document</title>
+    <script src="opret.js"></script>
 </head>
 <body>
-    <input placeholder="Email" id="email">
+ 
+    <h1>Registrer</h1>
+<form>
+    <input placeholder="Email" type="email" id="email">
     <input placeholder="kodeord" type = "password" id="kodeord">
-    <button id="login">login</button>
+    <input placeholder="navn" type="text" id="navn">
+    <button id="submit">Register</button>
+</form>
 
-    <div class="registrer_knap">
-        <a href="/opret">opret bruger</a>
-    </div>
+<h1 id="fejlmeddelelse"></h1>
     
-    <h1 id="fejlmeddelelse"></h1>
-
-    <script src="login.js"></script>
+    
 </body>
 </html>

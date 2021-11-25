@@ -3,9 +3,13 @@
 const express = require ("express")
 const app = express();
 const session = require("express-session")
+const fs= require("fs")
 
 //Vi fortæller serven at den skal lytter på følgende port:
-app.listen(9000)
+const PORT = 9000;
+app.listen(PORT,()=>{
+    console.log(`server lytter på http://localhost:${PORT}`)
+});
 
 //Vi gør så serveren kan læse vores JSON filer:
 app.use(express.json());
@@ -23,6 +27,19 @@ const path = require("path");
 
 //--- data---
 
+/*
+const loadUserDatabase= ()=>{
+    const rawdata=fs.readFileSync("users.json");
+    const users=JSON.parse(rawdata);
+    return users
+}
+
+const saveUserDatabase = (changedUsers) => {
+    const data = JSON.stringify(changeUsers);
+    fs.write
+}
+
+*/
 //vi laver et array, som brugerne kan være i. Jeg har hardcoded en bruger på forhånd:
 let users = [
     {
@@ -83,15 +100,26 @@ app.post("/login", (req, res) => {
     res.status(400).end();
 });
 
+
 //vi laver et endpoint til en post request til at oprette en bruger
 app.post("/opret", (req, res) => {
-    const user= (
-        email= req.body.email, 
-        kodeord= req.body.kodeord, 
-        navn= req.boby.navn
-    )
-    //hvis de indtastede informationer passer til en bruger, opretter vi en session.
-    req.session.email = req.body.email;
-                
-    res.redirect('/');
+
+    //den information, som brugeren har sendt ind:
+    const nyUser= {
+        email: req.body.email, 
+        kodeord: req.body.kodeord, 
+        navn: req.boby.navn
+    }
+
+    for(let i=0; i<users.length; i++){
+        //hvis brugerens email er den samme som i user arrayet (listen af brugere):
+        if(users[i].email == req.body.email){
+            res.statusMessage = "Email er allerede i brug";
+            res.status(400).end();
+        } else {
+            //hvis emailen ikke er i brug, pushes den nye brugers information til users arrayet:
+            users.push(nyUser);
+            res.redirect('/login');
+        }
+    }
 });

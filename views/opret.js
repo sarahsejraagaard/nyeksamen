@@ -1,6 +1,6 @@
 //Vi laver en listener til knappen login:
 
-document.getElementById("login").addEventListener("click", () => {
+document.getElementById("registrer").addEventListener("click", (event) => {
 
     //Brugerens værdi af email og indtastet kodeord gemmes. Det er et JSON objekt:
     //hvad vi sender til serveren:
@@ -25,13 +25,14 @@ document.getElementById("login").addEventListener("click", () => {
     })
     //svaret som vi får fra fetch:
     .then(function(data) {
-        if(data.statusText=="OK") {
+        if(data.statusText =="OK") {
             //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til login:
             document.location.href="/login";
-        } else {
+            return
+        } 
             //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
-            document.getElementById("fejlmeddelelse").innerHTML= data.statusText;
-        }
+            document.getElementById("fejlmeddelelse").innerHTML = data.statusText;
+    
     })
 })
 

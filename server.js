@@ -24,6 +24,7 @@ app.use(session({
 app.use(express.urlencoded({extended:false}));
 
 const path = require("path");
+// const { arrayBuffer } = require("stream/consumers");
 
 //--- data---
 
@@ -48,6 +49,18 @@ let users = [
         navn: "Sarah"
     },
 ];
+
+let annoncer = [
+    {
+        titel: "sarah@",
+        kategori: "bukser",
+        pris: 100,
+        billede: "hej",
+        ejer: "sarah@" //req.session.email 
+    },
+];
+
+
 // ---- Nu oprettes vores end-points:-----
 
 /*Når man går ind på localhost 9000 kommer man ind på vores index.html (home)
@@ -101,6 +114,28 @@ app.post("/login", (req, res) => {
 });
 
 
+//Endpont til profil-siden:
+app.get("/profil", (req, res) => {
+    //hvis ikke der er en session, altså at brugeren ikke har logget ind, redirecter vi brugeren til login-siden
+    if (!req.session.email) {
+        res.redirect("/login");
+    } else {
+       //Når den responder sender den brugeren til vores profil.html. Dirname giver os hele stien til nyeksamen
+    res.sendFile(__dirname+"/views/profil.html");
+    }
+});
+
+//Når laver vi et opret-endpoint
+app.get("/opret", (req, res) =>{
+    //Hvis der er en session, altså brugeren har logget ind, sender vi brugeren til home:
+    if (req.session.email) {
+        res.redirect("/");
+    } else {
+       //Når den responder sender den brugeren til vores login. Dirname giver os hele stien til nyeksamen
+    res.sendFile(__dirname+"/views/opret.html");
+    }
+});
+
 //vi laver et endpoint til en post request til at oprette en bruger
 app.post("/opret", (req, res) => {
 
@@ -108,7 +143,7 @@ app.post("/opret", (req, res) => {
     const nyUser= {
         email: req.body.email, 
         kodeord: req.body.kodeord, 
-        navn: req.boby.navn
+        navn: req.body.navn
     }
 
     for(let i=0; i<users.length; i++){
@@ -119,7 +154,51 @@ app.post("/opret", (req, res) => {
         } else {
             //hvis emailen ikke er i brug, pushes den nye brugers information til users arrayet:
             users.push(nyUser);
-            res.redirect('/login');
+            res.status(200).send("brugeren er nu oprettet");
         }
     }
 });
+
+//her laver vi et endpoint, som tillader brugeren at slette in profil:
+app.delete("/sletBruger", (req, res) => {
+    for(let i=0; i<users.length; i++) {
+        //hvis den brugers email som er logget ind er den samme som i user arrayet (listen af brugere):
+        if(users[i].email == req.session.email) {
+            //Jeg benytter splice-metoden til at fjerne et (1) specifikt index fra arrayet:
+            users.splice(i,1);
+            //Hvis email passer til den bruger som er logget ind fjernes det objekt fra 'users' arrayet og  deres session//
+            req.session.email = null
+            //brugeren bliver sendt til login:
+            res.status(200).send("Din bruger er slettet");
+            return;
+    }
+    //hvis email ikke findes, sendes følgende:
+    res.statusMessage = "der skete en fejl";
+    res.status(400).send("mailen findes ikke");
+}});
+
+//endpoint til at opdatere sit kodeord:
+app.put("/profil/opdaterKodeord", (req, res) => {
+    //den nye kode som brugeren sender defineres her:
+    var nyKodeord= req.body.nyKodeord
+
+    for(let i=0; i<users.length; i++) {
+        //brugeren som ønsker at opdatere kodeord findes:
+        if(users[i].email == req.session.email) {
+            users[i].kodeord = nyKodeord;
+            res.status(200).send("Din kode er nu ændret");
+            return;
+
+        }
+    } 
+    res.statusMessage = "der skete en fejl";
+    res.status(400).send("mailen findes ikke");
+});
+
+
+//logud endpoint:
+app.get("/logud", (req, res) => {
+    // brugerens session sættes til null:
+    req.session.email = null;
+    res.status(200).send("bruger en logget ud");
+})

@@ -13,10 +13,7 @@ document.getElementById("submitNyKodeord").addEventListener("click", () => {
     }, 
 //body:
 body:JSON.stringify(nyKodeord)
-
-
 })
-//svaret som vi får fra fetch:
 .then(function(data) {
     if(data.statusText=="OK") {
         window.alert("Din kode er nu opdateret");
@@ -29,6 +26,33 @@ body:JSON.stringify(nyKodeord)
 })
 });
 
+//Vi laver en listener til knappen nytNavn
+document.getElementById("nytNavn").addEventListener("click", () => {
+
+    let nytNavn = {
+        "nytNavn": document.getElementById("nytNavn").value
+    }
+
+    //vi går ind og tager (fetcher) i det nedenstående spor:
+    fetch("/profil/opdaterNavn", {
+    method: "PUT", 
+    headers: {
+        "Content-Type": "application/json", 
+    }, 
+//body:
+body:JSON.stringify(nytNavn)
+})
+.then(function(data) {
+    if(data.statusText=="OK") {
+        window.alert("Dit navn er nu opdateret");
+        //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til profil:
+        document.location.href="/profil";
+    } else {
+        //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
+        document.getElementById("fejlmeddelelse").innerHTML= data.statusText;
+    }
+})
+});
 
 
 //Vi laver en listener til knappen slet bruger:

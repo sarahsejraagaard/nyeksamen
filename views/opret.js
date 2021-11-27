@@ -15,7 +15,7 @@ document.getElementById("registrer").addEventListener("click", (event) => {
         "navn": navn
     }
 
-        //vi går ind og tager (fetcher) i det nedenstående spor, altså der hvor man logger ind:
+        //vi går ind og tager (fetcher) i det nedenstående spor, altså der hvor man opretter sig:
         fetch("/opret", {
         method: "POST", 
         headers: {

@@ -63,6 +63,8 @@ let annoncer = [
 
 // ---- Nu oprettes vores end-points:-----
 
+// BRUGER ENDPOINTS
+
 /*Når man går ind på localhost 9000 kommer man ind på vores index.html (home)
 Vi beder serven om noget, altså get-requst*/
 app.get("/", (req, res) => {
@@ -114,7 +116,7 @@ app.post("/login", (req, res) => {
 });
 
 
-//Endpont til profil-siden:
+//Endpont til profil-siden (så brugeren forbliver logget på):
 app.get("/profil", (req, res) => {
     //hvis ikke der er en session, altså at brugeren ikke har logget ind, redirecter vi brugeren til login-siden
     if (!req.session.email) {
@@ -195,6 +197,23 @@ app.put("/profil/opdaterKodeord", (req, res) => {
     res.status(400).send("mailen findes ikke");
 });
 
+//endpoint til at opdatere sit kodeord:
+app.put("/profil/opdaterNavn", (req, res) => {
+    //den nye kode som brugeren sender defineres her:
+    var nytNavn= req.body.nytNavn
+
+    for(let i=0; i<users.length; i++) {
+        //brugeren som ønsker at opdatere kodeord findes:
+        if(users[i].email == req.session.email) {
+            users[i].navn = nytNavn;
+            res.status(200).send("Dit navn er nu ændret");
+            return;
+        }
+    } 
+    res.statusMessage = "der skete en fejl";
+    res.status(400).send("mailen findes ikke");
+});
+
 
 //logud endpoint:
 app.get("/logud", (req, res) => {
@@ -202,3 +221,34 @@ app.get("/logud", (req, res) => {
     req.session.email = null;
     res.status(200).send("bruger en logget ud");
 })
+
+
+// ANNONCE ENDPOINTS
+
+//Når laver vi et opret annonce endpoint
+app.get("/opretAnnonce", (req, res) =>{
+    //Hvis der er en session, altså brugeren har logget ind, sender vi brugeren til home:
+    if (req.session.email) {
+        res.redirect("/opretAnnonce");
+    } else {
+       //Når den responder sender den brugeren til vores login. Dirname giver os hele stien til nyeksamen
+    res.sendFile(__dirname+"/views/opretAnnonce.html");
+    }
+});
+
+//vi laver et endpoint til en post request til at oprette en annonce
+app.post("/opretAnnonce", (req, res) => {
+
+    //den information, som brugeren har sendt ind:
+    const nyAnnonce= {
+        titel: req.body.titel, 
+        kategori: req.body.kategori, 
+        pris: req.body.pris, 
+        billede: req.body.billede, 
+        ejer: req.body.ejer
+    }
+
+    annoncer.push(nyAnnonce);
+    res.status(200).send("varen er nu oprettet");
+
+});

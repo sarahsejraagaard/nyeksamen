@@ -24,6 +24,7 @@ app.use(session({
 app.use(express.urlencoded({extended:false}));
 
 const path = require("path");
+const { stringify } = require("querystring");
 // const { arrayBuffer } = require("stream/consumers");
 
 //--- data---
@@ -42,13 +43,18 @@ const saveUserDatabase = (changedUsers) => {
 
 */
 //vi laver et array, som brugerne kan være i. Jeg har hardcoded en bruger på forhånd:
-let users = [
-    {
-        email: "sarah@",
-        kodeord: "hej",
-        navn: "Sarah"
-    },
-];
+let users = JSON.parse(fs.readFileSync("users.json"))
+// let users = [
+//     {
+//         email: "sarah@",
+//         kodeord: "hej",
+//         navn: "Sarah"
+//     },
+// ];
+
+function saveUsersdatabase () {
+    fs.writeFileSync("users.json", JSON.stringify(users))
+}
 
 let annoncer = [
     {
@@ -59,6 +65,7 @@ let annoncer = [
         ejer: "sarah@" //req.session.email 
     },
 ];
+
 
 
 // ---- Nu oprettes vores end-points:-----
@@ -87,7 +94,7 @@ app.get("/login", (req, res) =>{
         res.redirect("/");
     } else {
        //Når den responder sender den brugeren til vores login. Dirname giver os hele stien til nyeksamen
-    res.sendFile(__dirname+"/views/login.html");
+        res.sendFile(__dirname+"/views/login.html");
     }
 });
 
@@ -104,7 +111,6 @@ app.post("/login", (req, res) => {
                 res.redirect('/');
                 return;
             }
-            console.log("her");
             res.statusMessage = "Forkert password.";
             res.status(400).end();
             return;
@@ -132,6 +138,7 @@ app.get("/opret", (req, res) =>{
     //Hvis der er en session, altså brugeren har logget ind, sender vi brugeren til home:
     if (req.session.email) {
         res.redirect("/");
+      
     } else {
        //Når den responder sender den brugeren til vores login. Dirname giver os hele stien til nyeksamen
     res.sendFile(__dirname+"/views/opret.html");
@@ -150,15 +157,16 @@ app.post("/opret", (req, res) => {
 
     for(let i=0; i<users.length; i++){
         //hvis brugerens email er den samme som i user arrayet (listen af brugere):
-        if(users[i].email == req.body.email){
+        if(users[i].email === req.body.email){
             res.statusMessage = "Email er allerede i brug";
             res.status(400).end();
-        } else {
-            //hvis emailen ikke er i brug, pushes den nye brugers information til users arrayet:
-            users.push(nyUser);
-            res.status(200).send("brugeren er nu oprettet");
+            return;
         }
     }
+    //hvis emailen ikke er i brug, pushes den nye brugers information til users arrayet:
+    users.push(nyUser);
+    saveUsersdatabase();
+    res.status(200).send("brugeren er nu oprettet");
 });
 
 //her laver vi et endpoint, som tillader brugeren at slette in profil:
@@ -188,6 +196,7 @@ app.put("/profil/opdaterKodeord", (req, res) => {
         //brugeren som ønsker at opdatere kodeord findes:
         if(users[i].email == req.session.email) {
             users[i].kodeord = nyKodeord;
+            saveUsersdatabase();
             res.status(200).send("Din kode er nu ændret");
             return;
 
@@ -206,6 +215,7 @@ app.put("/profil/opdaterNavn", (req, res) => {
         //brugeren som ønsker at opdatere kodeord findes:
         if(users[i].email == req.session.email) {
             users[i].navn = nytNavn;
+            saveUsersdatabase();
             res.status(200).send("Dit navn er nu ændret");
             return;
         }
@@ -223,15 +233,16 @@ app.get("/logud", (req, res) => {
 })
 
 
+
 // ANNONCE ENDPOINTS
 
 //Når laver vi et opret annonce endpoint
 app.get("/opretAnnonce", (req, res) =>{
     //Hvis der er en session, altså brugeren har logget ind, sender vi brugeren til home:
-    if (req.session.email) {
-        res.redirect("/opretAnnonce");
+    if (!req.session.email) {
+        res.redirect("/login");
     } else {
-       //Når den responder sender den brugeren til vores login. Dirname giver os hele stien til nyeksamen
+       //Når den responder sender den brugeren til vores opret annonce side. Dirname giver os hele stien til nyeksamen
     res.sendFile(__dirname+"/views/opretAnnonce.html");
     }
 });

@@ -27,7 +27,7 @@ body:JSON.stringify(nyKodeord)
 });
 
 //Vi laver en listener til knappen nytNavn
-document.getElementById("nytNavn").addEventListener("click", () => {
+document.getElementById("submitNytNavn").addEventListener("click", () => {
 
     let nytNavn = {
         "nytNavn": document.getElementById("nytNavn").value

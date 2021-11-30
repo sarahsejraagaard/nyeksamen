@@ -1,11 +1,11 @@
 //Vi laver en listener til knappen opretAnnonce:
 
-document.getElementById("annonce_header").addEventListener("click", (event) => {
+document.getElementById("opretAnnonce").addEventListener("click", (event) => {
 
     //Brugerens værdi af indtastet informationer gemmes. Det er et JSON objekt:
     //hvad vi sender til serveren:
 
-    let titel = document.getElementById("titel").value
+    let titel = document.getElementById("title").value
     let kategori = document.getElementById("kategori").value
     let pris = document.getElementById("pris").value
     let billede = document.getElementById("billede").value

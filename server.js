@@ -56,6 +56,8 @@ function saveUsersdatabase () {
     fs.writeFileSync("users.json", JSON.stringify(users))
 }
 
+let annoncer = JSON.parse(fs.readFileSync("annoncer.json"))
+/*
 let annoncer = [
     {
         titel: "sarah@",
@@ -64,7 +66,10 @@ let annoncer = [
         billede: "hej",
         ejer: "sarah@" //req.session.email 
     },
-];
+];*/
+function saveAnnoncerdatabase () {
+    fs.writeFileSync("annoncer.json", JSON.stringify(annoncer))
+}
 
 
 
@@ -260,6 +265,7 @@ app.post("/opretAnnonce", (req, res) => {
     }
 
     annoncer.push(nyAnnonce);
+    saveAnnoncerdatabase();
     res.status(200).send("varen er nu oprettet");
 
 });

@@ -1,12 +1,14 @@
 //Når når kommer ind på home sendes en get request til vores endpoint seAnnoncer:
 
-fetch("/seAnnoncer", {
+fetch("/seBukserAnnoncer", {
     method: "GET", 
     headers: {
         "Content-Type": "application/json", 
     }, 
 
 })
+
+console.log("hej")
 //Den data vi får fra fetchen:
 .then(function(data) {
     //vi tager vores response og laver 

@@ -268,9 +268,17 @@ app.post("/opretAnnonce", (req, res) => {
     saveAnnoncerdatabase();
     res.status(200).send("varen er nu oprettet");
 
+
 });
 
 //Vi benytter get til at få informationen om vores annoncer (så vi kan se dem)
 app.get("/seAnnoncer", (req,res) => {
     res.status(200).send(annoncer);
+})
+
+//Vi benytter get til at få informationen om vores annoncer (så vi kan se dem)
+app.get("/seBukserAnnoncer", (req,res) => {
+    if (req.body.kategori== "Bukser") {
+        res.status(200).send(annoncer);
+    }
 })

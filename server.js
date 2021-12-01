@@ -269,3 +269,8 @@ app.post("/opretAnnonce", (req, res) => {
     res.status(200).send("varen er nu oprettet");
 
 });
+
+//Vi benytter get til at få informationen om vores annoncer (så vi kan se dem)
+app.get("/seAnnoncer", (req,res) => {
+    res.status(200).send(annoncer);
+})

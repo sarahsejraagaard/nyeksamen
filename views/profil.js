@@ -107,6 +107,34 @@ document.getElementById("logud").addEventListener("click", () => {
 
 
 
+/*Vi laver en listener til knappen slet annonce:
+window.addEventListener("load", () => {
+    document.getElementById("sletBruger").addEventListener("click", () => {
+
+        //vi går ind og tager (fetcher) i det nedenstående spor:
+        fetch("/sletBruger", {
+        method: "DELETE", 
+        headers: {
+            "Content-Type": "application/json", 
+        }, 
+    //vi har ingen body, fordi vi ikke sender noget til serveren
+    })
+    //svaret som vi får fra fetch:
+    .then(function(data) {
+        if(data.statusText=="OK") {
+            //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til login:
+            document.location.href="/login";
+        } else {
+            //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
+            document.getElementById("fejlmeddelelse").innerHTML= data.statusText;
+        }
+    })
+})
+
+});
+
+*/
+
 /*
 const submitButton = document.getElementById("submit")
 const kodeord = document.getElementById("kodeord")

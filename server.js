@@ -6,13 +6,18 @@ const session = require("express-session")
 const fs= require("fs")
 
 //Vi fortæller serven at den skal lytter på følgende port:
-const PORT = 9000;
+const PORT = 7000;
 app.listen(PORT,()=>{
     console.log(`server lytter på http://localhost:${PORT}`)
 });
 
 //Vi gør så serveren kan læse vores JSON filer:
 app.use(express.json());
+app.use("uploads", express.static("uploads"));
+
+const options = {
+    uploadDir: "./uploads"
+}
 
 app.use(session({
     secret: "godmorgen",
@@ -282,3 +287,22 @@ app.get("/seBukserAnnoncer", (req,res) => {
         res.status(200).send(annoncer);
     }
 })
+
+/*her laver vi et endpoint, som tillader brugeren at slette sin annonce:
+app.delete("/sletAnnonce", (req, res) => {
+    for(let i=0; i<annoncer.length; i++) {
+        //hvis den brugers email som er logget ind er den samme som i user arrayet (listen af brugere):
+        if(annoncer[i].ejer == req.session.email) {
+            //Jeg benytter splice-metoden til at fjerne et (1) specifikt index fra arrayet:
+            users.splice(i,1);
+            //Hvis email passer til den bruger som er logget ind fjernes det objekt fra 'users' arrayet og  deres session//
+            req.session.email = null
+            //brugeren bliver sendt til login:
+            res.status(200).send("Din bruger er slettet");
+            return;
+    }
+    //hvis email ikke findes, sendes følgende:
+    res.statusMessage = "der skete en fejl";
+    res.status(400).send("mailen findes ikke");
+}});
+*/

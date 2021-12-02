@@ -24,7 +24,7 @@ console.log("hej")
                 <p>${data[i].kategori}</p>
                 <p>${data[i].pris}</p>
                 <p>${data[i].ejer}</p>
-                <p>${data[i].billede}</p>
+                <p><img src="${data[i].billede}" style="height:50px; width:50px" /></p>
             </div>
         `;
     }

@@ -7,23 +7,23 @@ document.getElementById("submitNyKodeord").addEventListener("click", () => {
 
     //vi går ind og tager (fetcher) i det nedenstående spor:
     fetch("/profil/opdaterKodeord", {
-    method: "PUT", 
-    headers: {
-        "Content-Type": "application/json", 
-    }, 
-//body:
-body:JSON.stringify(nyKodeord)
-})
-.then(function(data) {
-    if(data.statusText=="OK") {
-        window.alert("Din kode er nu opdateret");
-        //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til profil:
-        document.location.href="/profil";
-    } else {
-        //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
-        document.getElementById("fejlmeddelelse").innerHTML= data.statusText;
-    }
-})
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        //body:
+        body: JSON.stringify(nyKodeord)
+    })
+        .then(function (data) {
+            if (data.statusText == "OK") {
+                window.alert("Din kode er nu opdateret");
+                //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til profil:
+                document.location.href = "/profil";
+            } else {
+                //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
+                document.getElementById("fejlmeddelelse").innerHTML = data.statusText;
+            }
+        })
 });
 
 //Vi laver en listener til knappen nytNavn
@@ -35,23 +35,23 @@ document.getElementById("submitNytNavn").addEventListener("click", () => {
 
     //vi går ind og tager (fetcher) i det nedenstående spor:
     fetch("/profil/opdaterNavn", {
-    method: "PUT", 
-    headers: {
-        "Content-Type": "application/json", 
-    }, 
-//body:
-body:JSON.stringify(nytNavn)
-})
-.then(function(data) {
-    if(data.statusText=="OK") {
-        window.alert("Dit navn er nu opdateret");
-        //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til profil:
-        document.location.href="/profil";
-    } else {
-        //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
-        document.getElementById("fejlmeddelelse").innerHTML= data.statusText;
-    }
-})
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        //body:
+        body: JSON.stringify(nytNavn)
+    })
+        .then(function (data) {
+            if (data.statusText == "OK") {
+                window.alert("Dit navn er nu opdateret");
+                //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til profil:
+                document.location.href = "/profil";
+            } else {
+                //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
+                document.getElementById("fejlmeddelelse").innerHTML = data.statusText;
+            }
+        })
 });
 
 
@@ -61,23 +61,23 @@ window.addEventListener("load", () => {
 
         //vi går ind og tager (fetcher) i det nedenstående spor:
         fetch("/sletBruger", {
-        method: "DELETE", 
-        headers: {
-            "Content-Type": "application/json", 
-        }, 
-    //vi har ingen body, fordi vi ikke sender noget til serveren
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            //vi har ingen body, fordi vi ikke sender noget til serveren
+        })
+            //svaret som vi får fra fetch:
+            .then(function (data) {
+                if (data.statusText == "OK") {
+                    //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til login:
+                    document.location.href = "/login";
+                } else {
+                    //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
+                    document.getElementById("fejlmeddelelse").innerHTML = data.statusText;
+                }
+            })
     })
-    //svaret som vi får fra fetch:
-    .then(function(data) {
-        if(data.statusText=="OK") {
-            //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til login:
-            document.location.href="/login";
-        } else {
-            //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
-            document.getElementById("fejlmeddelelse").innerHTML= data.statusText;
-        }
-    })
-})
 
 });
 
@@ -87,23 +87,57 @@ document.getElementById("logud").addEventListener("click", () => {
 
     //vi går ind og tager (fetcher) i det nedenstående spor:
     fetch("/logud", {
-    method: "GET", 
-    headers: {
-        "Content-Type": "application/json", 
-    }, 
-//vi har ingen body, fordi vi ikke sender noget til serveren
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        //vi har ingen body, fordi vi ikke sender noget til serveren
+    })
+        //svaret som vi får fra fetch:
+        .then(function (data) {
+            if (data.statusText == "OK") {
+                //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til login:
+                document.location.href = "/login";
+            } else {
+                //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
+                document.getElementById("fejlmeddelelse").innerHTML = data.statusText;
+            }
+        })
 })
-//svaret som vi får fra fetch:
-.then(function(data) {
-    if(data.statusText=="OK") {
-        //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til login:
-        document.location.href="/login";
-    } else {
-        //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
-        document.getElementById("fejlmeddelelse").innerHTML= data.statusText;
-    }
-})
-})
+
+
+
+
+//Vi laver en listener til knappen seAnnoncer, som skal tage fat i id'et: emailTilAtSeDineAnnoncer (mangler):
+
+window.addEventListener("load", () => {
+    document.getElementById("seAnnoncer").addEventListener("click", () => {
+
+
+        //vi går ind og tager (fetcher) i det nedenstående spor:
+        fetch("/seDineAnnonce", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        }
+    ).then(function (data) {
+
+            })
+
+            //svaret som vi får fra fetch:
+            .then(function (data) {
+                if (data.statusText == "OK") {
+                    //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til login:
+                    document.location.href = "/login";
+                } else {
+                    //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
+                    document.getElementById("fejlmeddelelse").innerHTML = data.statusText;
+                }
+            })
+    })
+
+});
 
 
 
@@ -113,10 +147,10 @@ window.addEventListener("load", () => {
 
         //vi går ind og tager (fetcher) i det nedenstående spor:
         fetch("/sletBruger", {
-        method: "DELETE", 
+        method: "DELETE",
         headers: {
-            "Content-Type": "application/json", 
-        }, 
+            "Content-Type": "application/json",
+        },
     //vi har ingen body, fordi vi ikke sender noget til serveren
     })
     //svaret som vi får fra fetch:
@@ -151,7 +185,7 @@ const createUser = (e) => {
     fetch(`http://localhost:9000/opret/${navn.value}-${kodeord.value}-${email.value}`, {
         method: "POST"
     })
-   
+
 }
 init()
 */

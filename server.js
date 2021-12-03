@@ -1,13 +1,13 @@
 //Først installeres vores moduler, som vi skal benytte:
 
-const express = require ("express")
+const express = require("express")
 const app = express();
 const session = require("express-session")
-const fs= require("fs")
+const fs = require("fs")
 
 //Vi fortæller serven at den skal lytter på følgende port:
 const PORT = 7000;
-app.listen(PORT,()=>{
+app.listen(PORT, () => {
     console.log(`server lytter på http://localhost:${PORT}`)
 });
 
@@ -26,7 +26,7 @@ app.use(session({
 
 }));
 
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({ extended: false }));
 
 const path = require("path");
 const { stringify } = require("querystring");
@@ -57,7 +57,7 @@ let users = JSON.parse(fs.readFileSync("users.json"))
 //     },
 // ];
 
-function saveUsersdatabase () {
+function saveUsersdatabase() {
     fs.writeFileSync("users.json", JSON.stringify(users))
 }
 
@@ -72,7 +72,7 @@ let annoncer = [
         ejer: "sarah@" //req.session.email 
     },
 ];*/
-function saveAnnoncerdatabase () {
+function saveAnnoncerdatabase() {
     fs.writeFileSync("annoncer.json", JSON.stringify(annoncer))
 }
 
@@ -89,8 +89,8 @@ app.get("/", (req, res) => {
     if (!req.session.email) {
         res.redirect("/login");
     } else {
-       //Når den responder sender den brugeren til vores index.html. Dirname giver os hele stien til nyeksamen
-    res.sendFile(__dirname+"/views/index.html");
+        //Når den responder sender den brugeren til vores index.html. Dirname giver os hele stien til nyeksamen
+        res.sendFile(__dirname + "/views/index.html");
     }
 });
 
@@ -98,23 +98,23 @@ app.get("/", (req, res) => {
 app.use(express.static(path.join(__dirname, "views")));
 
 //Når laver vi et login-endpoint
-app.get("/login", (req, res) =>{
+app.get("/login", (req, res) => {
     //Hvis der er en session, altså brugeren har logget ind, sender vi brugeren til home:
     if (req.session.email) {
         res.redirect("/");
     } else {
-       //Når den responder sender den brugeren til vores login. Dirname giver os hele stien til nyeksamen
-        res.sendFile(__dirname+"/views/login.html");
+        //Når den responder sender den brugeren til vores login. Dirname giver os hele stien til nyeksamen
+        res.sendFile(__dirname + "/views/login.html");
     }
 });
 
 //Vi laver et endpoint til et post request til login
 app.post("/login", (req, res) => {
-    for(let i=0; i<users.length; i++) {
+    for (let i = 0; i < users.length; i++) {
         //hvis brugerens email er den samme som i user arrayet (listen af brugere):
-        if(users[i].email == req.body.email) {
+        if (users[i].email == req.body.email) {
             //herefter går vi videre og tjekker kodeordet:
-            if(users[i].kodeord == req.body.kodeord) {
+            if (users[i].kodeord == req.body.kodeord) {
                 //hvis de indtastede informationer passer til en bruger, opretter vi en session.
                 req.session.email = req.body.email;
                 //brugeren bliver sendt til home:
@@ -138,20 +138,20 @@ app.get("/profil", (req, res) => {
     if (!req.session.email) {
         res.redirect("/login");
     } else {
-       //Når den responder sender den brugeren til vores profil.html. Dirname giver os hele stien til nyeksamen
-    res.sendFile(__dirname+"/views/profil.html");
+        //Når den responder sender den brugeren til vores profil.html. Dirname giver os hele stien til nyeksamen
+        res.sendFile(__dirname + "/views/profil.html");
     }
 });
 
 //Når laver vi et opret-endpoint
-app.get("/opret", (req, res) =>{
+app.get("/opret", (req, res) => {
     //Hvis der er en session, altså brugeren har logget ind, sender vi brugeren til home:
     if (req.session.email) {
         res.redirect("/");
-      
+
     } else {
-       //Når den responder sender den brugeren til vores login. Dirname giver os hele stien til nyeksamen
-    res.sendFile(__dirname+"/views/opret.html");
+        //Når den responder sender den brugeren til vores login. Dirname giver os hele stien til nyeksamen
+        res.sendFile(__dirname + "/views/opret.html");
     }
 });
 
@@ -159,15 +159,15 @@ app.get("/opret", (req, res) =>{
 app.post("/opret", (req, res) => {
 
     //den information, som brugeren har sendt ind:
-    const nyUser= {
-        email: req.body.email, 
-        kodeord: req.body.kodeord, 
+    const nyUser = {
+        email: req.body.email,
+        kodeord: req.body.kodeord,
         navn: req.body.navn
     }
 
-    for(let i=0; i<users.length; i++){
+    for (let i = 0; i < users.length; i++) {
         //hvis brugerens email er den samme som i user arrayet (listen af brugere):
-        if(users[i].email === req.body.email){
+        if (users[i].email === req.body.email) {
             res.statusMessage = "Email er allerede i brug";
             res.status(400).end();
             return;
@@ -181,37 +181,38 @@ app.post("/opret", (req, res) => {
 
 //her laver vi et endpoint, som tillader brugeren at slette in profil:
 app.delete("/sletBruger", (req, res) => {
-    for(let i=0; i<users.length; i++) {
+    for (let i = 0; i < users.length; i++) {
         //hvis den brugers email som er logget ind er den samme som i user arrayet (listen af brugere):
-        if(users[i].email == req.session.email) {
+        if (users[i].email == req.session.email) {
             //Jeg benytter splice-metoden til at fjerne et (1) specifikt index fra arrayet:
-            users.splice(i,1);
+            users.splice(i, 1);
             //Hvis email passer til den bruger som er logget ind fjernes det objekt fra 'users' arrayet og  deres session//
             req.session.email = null
             //brugeren bliver sendt til login:
             res.status(200).send("Din bruger er slettet");
             return;
+        }
+        //hvis email ikke findes, sendes følgende:
+        res.statusMessage = "der skete en fejl";
+        res.status(400).send("mailen findes ikke");
     }
-    //hvis email ikke findes, sendes følgende:
-    res.statusMessage = "der skete en fejl";
-    res.status(400).send("mailen findes ikke");
-}});
+});
 
 //endpoint til at opdatere sit kodeord:
 app.put("/profil/opdaterKodeord", (req, res) => {
     //den nye kode som brugeren sender defineres her:
-    var nyKodeord= req.body.nyKodeord
+    var nyKodeord = req.body.nyKodeord
 
-    for(let i=0; i<users.length; i++) {
+    for (let i = 0; i < users.length; i++) {
         //brugeren som ønsker at opdatere kodeord findes:
-        if(users[i].email == req.session.email) {
+        if (users[i].email == req.session.email) {
             users[i].kodeord = nyKodeord;
             saveUsersdatabase();
             res.status(200).send("Din kode er nu ændret");
             return;
 
         }
-    } 
+    }
     res.statusMessage = "der skete en fejl";
     res.status(400).send("mailen findes ikke");
 });
@@ -219,17 +220,17 @@ app.put("/profil/opdaterKodeord", (req, res) => {
 //endpoint til at opdatere sit kodeord:
 app.put("/profil/opdaterNavn", (req, res) => {
     //den nye kode som brugeren sender defineres her:
-    var nytNavn= req.body.nytNavn
+    var nytNavn = req.body.nytNavn
 
-    for(let i=0; i<users.length; i++) {
+    for (let i = 0; i < users.length; i++) {
         //brugeren som ønsker at opdatere kodeord findes:
-        if(users[i].email == req.session.email) {
+        if (users[i].email == req.session.email) {
             users[i].navn = nytNavn;
             saveUsersdatabase();
             res.status(200).send("Dit navn er nu ændret");
             return;
         }
-    } 
+    }
     res.statusMessage = "der skete en fejl";
     res.status(400).send("mailen findes ikke");
 });
@@ -247,13 +248,13 @@ app.get("/logud", (req, res) => {
 // ANNONCE ENDPOINTS
 
 //Når laver vi et opret annonce endpoint
-app.get("/opretAnnonce", (req, res) =>{
+app.get("/opretAnnonce", (req, res) => {
     //Hvis der er en session, altså brugeren har logget ind, sender vi brugeren til home:
     if (!req.session.email) {
         res.redirect("/login");
     } else {
-       //Når den responder sender den brugeren til vores opret annonce side. Dirname giver os hele stien til nyeksamen
-    res.sendFile(__dirname+"/views/opretAnnonce.html");
+        //Når den responder sender den brugeren til vores opret annonce side. Dirname giver os hele stien til nyeksamen
+        res.sendFile(__dirname + "/views/opretAnnonce.html");
     }
 });
 
@@ -261,13 +262,19 @@ app.get("/opretAnnonce", (req, res) =>{
 app.post("/opretAnnonce", (req, res) => {
 
     //den information, som brugeren har sendt ind:
-    const nyAnnonce= {
-        titel: req.body.titel, 
-        kategori: req.body.kategori, 
-        pris: req.body.pris, 
-        billede: req.body.billede, 
-        ejer: req.body.ejer
+    const nyAnnonce = {
+        titel: req.body.titel,
+        kategori: req.body.kategori,
+        pris: req.body.pris,
+        billede: req.body.billede,
+        ejer: req.body.ejer,
+        id: Math.floor(Math.random() * 1000000000)
     }
+
+    /* Til edris:
+    når man opdatere skal både emailen og annonce-id tjekkes om det stemmer overens
+    */
+
 
     annoncer.push(nyAnnonce);
     saveAnnoncerdatabase();
@@ -277,16 +284,31 @@ app.post("/opretAnnonce", (req, res) => {
 });
 
 //Vi benytter get til at få informationen om vores annoncer (så vi kan se dem)
-app.get("/seAnnoncer", (req,res) => {
+app.get("/seAnnoncer", (req, res) => {
     res.status(200).send(annoncer);
 })
 
 //Vi benytter get til at få informationen om vores annoncer (så vi kan se dem)
-app.get("/seBukserAnnoncer", (req,res) => {
-    if (req.body.kategori== "Bukser") {
+app.get("/seBukserAnnoncer", (req, res) => {
+    if (req.body.kategori == "Bukser") {
         res.status(200).send(annoncer);
     }
 })
+
+// edris (2/3): tjekke om annonceejeren er den som har sendt requesten. return personens annoncer
+app.get("/seDineAnnoncer", (req, res) => {
+    let brugerAnnoncer = [
+
+    ]
+    for (let i = 0; i < annoncer.length; i++) {
+        if (annoncer[i].ejer == req.body.email) {
+            brugerAnnoncer.push(annoncer[i])
+        } else {
+
+        }
+    }
+    res.json(brugerAnnoncer);
+    });
 
 /*her laver vi et endpoint, som tillader brugeren at slette sin annonce:
 app.delete("/sletAnnonce", (req, res) => {

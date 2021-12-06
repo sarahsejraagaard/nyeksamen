@@ -28,7 +28,7 @@ document.getElementById("registrer").addEventListener("click", (event) => {
         if(data.statusText =="OK") {
             //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til login:
             document.location.href="/login";
-            return
+            return;
         } 
             //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
             document.getElementById("fejlmeddelelse").innerHTML = data.statusText;

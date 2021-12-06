@@ -286,10 +286,35 @@ app.get("/seAnnoncer", (req, res) => {
 
 //Vi benytter get til at få informationen om vores annoncer (så vi kan se dem)
 app.get("/seBukserAnnoncer", (req, res) => {
+    let bukseAnnoncer = [
+
+    ]
+    for (let i = 0; i<annoncer.length; i++) {
+        if (annoncer[i].kategori== "Bukser") {
+            bukseAnnoncer.push(annoncer[i])
+        }
+    }
+    res.json(bukseAnnoncer);
+});
+    /*
     if (req.body.kategori == "Bukser") {
         res.status(200).send(annoncer);
     }
-})
+    */
+
+    //Vi benytter get til at få informationen om vores annoncer (så vi kan se dem)
+app.get("/seJacketsAnnoncer", (req, res) => {
+    let jacketsAnnoncer = [
+
+    ]
+    for (let i = 0; i<annoncer.length; i++) {
+        if (annoncer[i].kategori== "Jackets") {
+            jacketsAnnoncer.push(annoncer[i])
+        }
+    }
+    res.json(jacketsAnnoncer);
+});
+
 
 // tjekke om annonceejeren er den som har sendt requesten. return personens annoncer
 app.get("/seDineAnnoncer", (req, res) => {

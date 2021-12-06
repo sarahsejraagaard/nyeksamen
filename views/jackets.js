@@ -1,6 +1,6 @@
-//Der sendes en request til /seBukserAnnoncer:
+//Der sendes en request til /seJacketsAnnoncer:
     
-fetch("/seBukserAnnoncer", {
+fetch("/seJacketsAnnoncer", {
     method: "GET", 
     headers: {
         "Content-Type": "application/json", 
@@ -17,7 +17,7 @@ fetch("/seBukserAnnoncer", {
     console.log(data);
     for(let i=0; i<data.length; i++) {
         //Vi indsætter vores annoncer i html-siden:
-        document.getElementById("seBukserAnnoncer").innerHTML+=`
+        document.getElementById("seJacketsAnnoncer").innerHTML+=`
             <div class= seAnnoncer>
                 <h1>${data[i].titel}</h1>
                 <p>${data[i].kategori}</p>

@@ -1,6 +1,23 @@
 //Vi laver en listener til knappen opretAnnonce:
 
-document.getElementById("opretAnnonce").addEventListener("click", (event) => {
+
+/*let form = document.getElementById("annonce")
+
+form.addEventListener("submit", async (event) => {
+    e.preventDefault();
+
+    const formData = new formData(form);
+
+    await fetch("/opretAnnonce", {
+        method: "POST", 
+        body: formData 
+    });
+});
+*/
+
+
+
+document.getElementById("opretAnnonce").addEventListener("click", (event) =>{
 
     //Brugerens værdi af indtastet informationer gemmes. Det er et JSON objekt:
     //hvad vi sender til serveren:
@@ -9,14 +26,12 @@ document.getElementById("opretAnnonce").addEventListener("click", (event) => {
     let kategori = document.getElementById("kategori").value
     let pris = document.getElementById("pris").value
     let billede = document.getElementById("billede").value
-    let ejer = document.getElementById("ejer").value
 
     let nyAnnonce = {
         "titel": titel,
         "kategori": kategori,
         "pris": pris,
-        "billede": billede,
-        "ejer": ejer
+        "billede": billede
     }
 
         //vi går ind og tager (fetcher) i det nedenstående spor, altså der hvor man logger ind:

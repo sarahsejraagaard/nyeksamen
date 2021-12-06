@@ -4,6 +4,7 @@ const express = require("express")
 const app = express();
 const session = require("express-session")
 const fs = require("fs")
+const formData = require("express-form-data")
 
 //Vi fortæller serven at den skal lytter på følgende port:
 const PORT = 7000;
@@ -47,18 +48,11 @@ const saveUserDatabase = (changedUsers) => {
 }
 
 */
-//vi laver et array, som brugerne kan være i. Jeg har hardcoded en bruger på forhånd:
+
 let users = JSON.parse(fs.readFileSync("users.json"))
-// let users = [
-//     {
-//         email: "sarah@",
-//         kodeord: "hej",
-//         navn: "Sarah"
-//     },
-// ];
 
 function saveUsersdatabase() {
-    fs.writeFileSync("users.json", JSON.stringify(users))
+    fs.writeFileSync("users.json", JSON.stringify(users, 4))
 }
 
 let annoncer = JSON.parse(fs.readFileSync("annoncer.json"))
@@ -259,7 +253,11 @@ app.get("/opretAnnonce", (req, res) => {
 });
 
 //vi laver et endpoint til en post request til at oprette en annonce
+
+
 app.post("/opretAnnonce", (req, res) => {
+
+
 
     //den information, som brugeren har sendt ind:
     const nyAnnonce = {
@@ -267,13 +265,11 @@ app.post("/opretAnnonce", (req, res) => {
         kategori: req.body.kategori,
         pris: req.body.pris,
         billede: req.body.billede,
-        ejer: req.body.ejer,
+        ejer: req.session.email,
         id: Math.floor(Math.random() * 1000000000)
     }
 
-    /* Til edris:
-    når man opdatere skal både emailen og annonce-id tjekkes om det stemmer overens
-    */
+
 
 
     annoncer.push(nyAnnonce);
@@ -295,17 +291,17 @@ app.get("/seBukserAnnoncer", (req, res) => {
     }
 })
 
-// edris (2/3): tjekke om annonceejeren er den som har sendt requesten. return personens annoncer
+// tjekke om annonceejeren er den som har sendt requesten. return personens annoncer
 app.get("/seDineAnnoncer", (req, res) => {
     let brugerAnnoncer = [
 
     ]
     for (let i = 0; i < annoncer.length; i++) {
-        if (annoncer[i].ejer == req.body.email) {
+        if (annoncer[i].ejer == req.session.email) {
             brugerAnnoncer.push(annoncer[i])
-        } else {
-
+            
         }
+        console.log(annoncer[i].ejer);
     }
     res.json(brugerAnnoncer);
     });

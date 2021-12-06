@@ -108,37 +108,52 @@ document.getElementById("logud").addEventListener("click", () => {
 
 
 
-//Vi laver en listener til knappen seAnnoncer, som skal tage fat i id'et: emailTilAtSeDineAnnoncer (mangler):
+//Nedenfor tages fat i end-pointet /seDineAnnoncer, som gør en bruger kan se dens oprettede annoncer:
+fetch("/seDineAnnoncer", {
+    method: "GET", 
+    headers: {
+        "Content-Type": "application/json", 
+    }, 
 
-window.addEventListener("load", () => {
-    document.getElementById("seAnnoncer").addEventListener("click", () => {
+})
+//Den data vi får fra fetchen:
+.then(function(data) {
+    //vi tager vores response og laver 
+    return data.json();
+})
 
-
-        //vi går ind og tager (fetcher) i det nedenstående spor:
-        fetch("/seDineAnnonce", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            }
-        }
-    ).then(function (data) {
-
-            })
-
-            //svaret som vi får fra fetch:
-            .then(function (data) {
-                if (data.statusText == "OK") {
-                    //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til login:
-                    document.location.href = "/login";
-                } else {
-                    //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
-                    document.getElementById("fejlmeddelelse").innerHTML = data.statusText;
-                }
-            })
-    })
-
+.then(function(data) {
+    console.log(data);
+    for(let i=0; i<data.length; i++) {
+        //Vi indsætter vores annoncer i html-siden:
+        document.getElementById("mineAnnoncer").innerHTML+=`
+            <div class= seAnnoncer>
+                <h1>${data[i].titel}</h1>
+                <p>${data[i].kategori}</p>
+                <p>${data[i].pris}</p>
+                <p>${data[i].ejer}</p>
+                <p><img src="${data[i].billede}" style="height:50px; width:50px" /></p>
+            </div>
+        `;
+    }
 });
 
+
+
+
+        /*svaret som vi får fra fetch:
+.then(function (data) {
+if (data.statusText == "OK") {
+//Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til login:
+document.location.href = "/login";
+} else {
+//Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
+document.getElementById("fejlmeddelelse").innerHTML = data.statusText;
+}
+})
+});
+
+*/
 
 
 /*Vi laver en listener til knappen slet annonce:
@@ -165,9 +180,9 @@ window.addEventListener("load", () => {
     })
 })
 
-});
-
 */
+
+
 
 /*
 const submitButton = document.getElementById("submit")

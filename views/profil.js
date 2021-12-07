@@ -109,6 +109,16 @@ document.getElementById("logud").addEventListener("click", () => {
 
 
 //Nedenfor tages fat i end-pointet /seDineAnnoncer, som gør en bruger kan se dens oprettede annoncer:
+ware_table= document.getElementById("vare_table")
+ware_table.innerHTML= `
+<tr>
+    <th>titel</th>
+    <th>kategori</th>
+    <th>pris</th>
+    <th>billede</th>
+</tr>
+`
+
 fetch("/seDineAnnoncer", {
     method: "GET", 
     headers: {
@@ -125,15 +135,18 @@ fetch("/seDineAnnoncer", {
 .then(function(data) {
     console.log(data);
     for(let i=0; i<data.length; i++) {
-        //Vi indsætter vores annoncer i html-siden:
-        document.getElementById("mineAnnoncer").innerHTML+=`
-            <div class= seAnnoncer>
-                <h1>${data[i].titel}</h1>
-                <p>${data[i].kategori}</p>
-                <p>${data[i].pris}</p>
-                <p>${data[i].ejer}</p>
-                <p><img src="${data[i].billede}" style="height:50px; width:50px" /></p>
-            </div>
+        ware_table.innerHTML+=`
+            <table class= seAnnoncer>
+                <tr>
+                    <td>${data[i].titel}</td>
+                    <td>${data[i].kategori}</td>
+                    <td>${data[i].pris}</td>
+                    <td>${data[i].ejer}</td>
+                    <td><img src="${data[i].billede}" style="height:50px; width:50px" /></td>
+                    <td><button onclick id="Edit"> Edit </button></td>
+                </tr>
+                
+            </table>
         `;
     }
 });

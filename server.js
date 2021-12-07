@@ -241,7 +241,7 @@ app.get("/logud", (req, res) => {
 
 // ANNONCE ENDPOINTS
 
-//Når laver vi et opret annonce endpoint
+//Når laver vi et get endpoint til annoncerne:
 app.get("/opretAnnonce", (req, res) => {
     //Hvis der er en session, altså brugeren har logget ind, sender vi brugeren til home:
     if (!req.session.email) {
@@ -253,8 +253,6 @@ app.get("/opretAnnonce", (req, res) => {
 });
 
 //vi laver et endpoint til en post request til at oprette en annonce
-
-
 app.post("/opretAnnonce", (req, res) => {
 
 
@@ -326,10 +324,14 @@ app.get("/seDineAnnoncer", (req, res) => {
             brugerAnnoncer.push(annoncer[i])
             
         }
-        console.log(annoncer[i].ejer);
     }
     res.json(brugerAnnoncer);
     });
+
+//Her laves et endpoint, som tillader brugeren at opdatere sin vare:
+app.put("/opdaterAnnonce", (req, res) => {
+    let nyAnnonceInfo = JSON.parse(JSON.stringify(req.body))
+})
 
 /*her laver vi et endpoint, som tillader brugeren at slette sin annonce:
 app.delete("/sletAnnonce", (req, res) => {

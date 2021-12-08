@@ -175,6 +175,7 @@ app.post("/opret", (req, res) => {
 
 //her laver vi et endpoint, som tillader brugeren at slette in profil:
 app.delete("/sletBruger", (req, res) => {
+    console.log("Slet bruger + " + req.body.email);
     for (let i = 0; i < users.length; i++) {
         //hvis den brugers email som er logget ind er den samme som i user arrayet (listen af brugere):
         if (users[i].email == req.session.email) {
@@ -187,9 +188,9 @@ app.delete("/sletBruger", (req, res) => {
             return;
         }
         //hvis email ikke findes, sendes følgende:
-        res.statusMessage = "der skete en fejl";
-        res.status(400).send("mailen findes ikke");
     }
+    res.statusMessage = "der skete en fejl";
+        res.status(400).send("mailen findes ikke");
 });
 
 //endpoint til at opdatere sit kodeord:
@@ -211,7 +212,7 @@ app.put("/profil/opdaterKodeord", (req, res) => {
     res.status(400).send("mailen findes ikke");
 });
 
-//endpoint til at opdatere sit kodeord:
+//endpoint til at opdatere sit navn:
 app.put("/profil/opdaterNavn", (req, res) => {
     //den nye kode som brugeren sender defineres her:
     var nytNavn = req.body.nytNavn
@@ -252,12 +253,15 @@ app.get("/opretAnnonce", (req, res) => {
     }
 });
 
-//vi laver et endpoint til en post request til at oprette en annonce
 app.post("/opretAnnonce", (req, res) => {
-
-
-
     //den information, som brugeren har sendt ind:
+    for(let i=0; i<annoncer.length; i++) {
+        if(annoncer[i].titel == req.body.titel && annoncer[i].ejer == req.session.email) {
+            res.status(400).send("Du ejer allerede en annonce med denne titel.");
+            return;
+        }
+    }
+
     const nyAnnonce = {
         titel: req.body.titel,
         kategori: req.body.kategori,
@@ -267,14 +271,45 @@ app.post("/opretAnnonce", (req, res) => {
         id: Math.floor(Math.random() * 1000000000)
     }
 
-
-
-
     annoncer.push(nyAnnonce);
     saveAnnoncerdatabase();
     res.status(200).send("varen er nu oprettet");
+});
 
 
+//opdater annonce end-point. Da billedefunktionen ikke virker, sender ser ikke noget ind:
+app.put("/opdaterAnnonce", (req,res) => {
+    console.log("Does this thing work?");
+    console.log(req.body);
+    let nyAnnonce = {
+        titel: req.body.titel,
+        kategori: req.body.kategori,
+        pris: req.body.pris,
+        billede: "/billede",
+        ejer: req.session.email,
+        id: Math.floor(Math.random() * 1000000000)
+    }
+    for(let i=0; i<annoncer.length; i++) {
+        if(annoncer[i].titel == req.body.titel && annoncer[i].ejer == req.session.email) {
+            annoncer[i] = nyAnnonce;
+            res.status(200).send("Annonce opdateret.");
+            return;
+        }
+    }
+    res.status(400).send("Du ejer ikke en annonce med denne titel.");
+});
+
+//endpoint til slet annonce:
+app.delete("/sletAnnonce", (req,res) => {
+    console.log("Slet annonce + " + req.body.titel);
+    for(let i=0; i<annoncer.length; i++) {
+        if(annoncer[i].titel == req.body.titel && annoncer[i].ejer == req.session.email) {
+            annoncer.splice(i,1);
+            res.status(200).send("Annonce slettet.");
+            return;
+        }
+    }
+    res.status(400).send("Du ejer ikke en annonce med denne titel.");
 });
 
 //Vi benytter get til at få informationen om vores annoncer (så vi kan se dem)
@@ -282,8 +317,15 @@ app.get("/seAnnoncer", (req, res) => {
     res.status(200).send(annoncer);
 })
 
-//Vi benytter get til at få informationen om vores annoncer (så vi kan se dem)
+//her hentes html siden:
 app.get("/seBukserAnnoncer", (req, res) => {
+    res.sendFile(__dirname + "/views/bukser.html");
+    
+});
+//her hentes alle med bukse kategori
+app.get("/getBukserAnnoncer", (req, res) => {
+    let annoncer = JSON.parse(fs.readFileSync("annoncer.json"))
+
     let bukseAnnoncer = [
 
     ]
@@ -292,18 +334,18 @@ app.get("/seBukserAnnoncer", (req, res) => {
             bukseAnnoncer.push(annoncer[i])
         }
     }
-    res.json(bukseAnnoncer);
+
+    res.json(bukseAnnoncer)
+    
 });
-    /*
-    if (req.body.kategori == "Bukser") {
-        res.status(200).send(annoncer);
-    }
-    */
 
-    //Vi benytter get til at få informationen om vores annoncer (så vi kan se dem)
+
 app.get("/seJacketsAnnoncer", (req, res) => {
-    let jacketsAnnoncer = [
+    res.sendFile(__dirname + "/views/jackets.html");
 
+app.get("/getJacketsAnnoncer", (req, res) => {
+    let annoncer = JSON.parse(fs.readFileSync("annoncer.json"))
+    let jacketsAnnoncer = [
     ]
     for (let i = 0; i<annoncer.length; i++) {
         if (annoncer[i].kategori== "Jackets") {
@@ -314,40 +356,51 @@ app.get("/seJacketsAnnoncer", (req, res) => {
 });
 
 
-// tjekke om annonceejeren er den som har sendt requesten. return personens annoncer
+app.get("/seShirtsAnnoncer", (req, res) => {
+    res.sendFile(__dirname + "/views/shirts.html");
+
+app.get("/getShirtsAnnoncer", (req, res) => {
+    let annoncer = JSON.parse(fs.readFileSync("annoncer.json"))
+    let shirtsAnnoncer = [
+    ]
+    for (let i = 0; i<annoncer.length; i++) {
+        if (annoncer[i].kategori== "Shirts") {
+            shirtsAnnoncer.push(annoncer[i])
+        }
+    }
+    res.json(shirtsAnnoncer);
+});
+
+app.get("/seBluserAnnoncer", (req, res) => {
+    res.sendFile(__dirname + "/views/Bluser.html");
+
+app.get("/getBluserAnnoncer", (req, res) => {
+    let annoncer = JSON.parse(fs.readFileSync("annoncer.json"))
+    let bluserAnnoncer = [
+    ]
+    for (let i = 0; i<annoncer.length; i++) {
+        if (annoncer[i].kategori== "Bluser") {
+            bluserAnnoncer.push(annoncer[i])
+        }
+    }
+    res.json(bluserAnnoncer);
+});
+
+})
+})
+
+})
 app.get("/seDineAnnoncer", (req, res) => {
     let brugerAnnoncer = [
 
     ]
     for (let i = 0; i < annoncer.length; i++) {
         if (annoncer[i].ejer == req.session.email) {
+            console.log(annoncer[i]);
             brugerAnnoncer.push(annoncer[i])
-            
         }
     }
-    res.json(brugerAnnoncer);
+    
+    res.status(200).send(brugerAnnoncer);
     });
 
-//Her laves et endpoint, som tillader brugeren at opdatere sin vare:
-app.put("/opdaterAnnonce", (req, res) => {
-    let nyAnnonceInfo = JSON.parse(JSON.stringify(req.body))
-})
-
-/*her laver vi et endpoint, som tillader brugeren at slette sin annonce:
-app.delete("/sletAnnonce", (req, res) => {
-    for(let i=0; i<annoncer.length; i++) {
-        //hvis den brugers email som er logget ind er den samme som i user arrayet (listen af brugere):
-        if(annoncer[i].ejer == req.session.email) {
-            //Jeg benytter splice-metoden til at fjerne et (1) specifikt index fra arrayet:
-            users.splice(i,1);
-            //Hvis email passer til den bruger som er logget ind fjernes det objekt fra 'users' arrayet og  deres session//
-            req.session.email = null
-            //brugeren bliver sendt til login:
-            res.status(200).send("Din bruger er slettet");
-            return;
-    }
-    //hvis email ikke findes, sendes følgende:
-    res.statusMessage = "der skete en fejl";
-    res.status(400).send("mailen findes ikke");
-}});
-*/

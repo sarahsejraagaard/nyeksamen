@@ -105,10 +105,103 @@ document.getElementById("logud").addEventListener("click", () => {
         })
 })
 
+//opdater din annonce: her matches navnet på din annonce med inputfeltet
+document.getElementById("opdaterAnnonce").addEventListener("click", () => {
+    let opdaterAnnonceData = {
+        "titel": document.getElementById("opdaterTitel").value,
+        "kategori": document.getElementById("opdaterKategori").value,
+        "pris": document.getElementById("opdaterPris").value
+    }
+
+    //vi går ind og tager (fetcher) i det nedenstående spor:
+    fetch("/opdaterAnnonce", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(opdaterAnnonceData)
+    })
+        .then(function (data) {
+            if (data.statusText == "OK") {
+                window.alert("Din annonce er nu opdateret.");
+                //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til profil:
+                document.location.href = "/profil";
+            } else {
+                //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse, som svarer til vores data
+                window.alert("Du ejer ikke en annonce med denne titel.");
+            }
+        })
+}); 
+
+//tabel over dine annoncer
+ware_table= document.getElementById("vare_table")
+ware_table.innerHTML= `
+<tr>
+    <th>titel</th>
+    <th>kategori</th>
+    <th>pris</th>
+    <th>billede</th>
+</tr>
+`
+fetch("/seDineAnnoncer", {
+    method: "GET", 
+    headers: {
+        "Content-Type": "application/json", 
+    }, 
+
+})
+//Den data vi får fra fetchen:
+.then(function(data) {
+    //vi tager vores response og laver 
+    return data.json();
+})
+
+.then(function(data) {
+    console.log(data);
+    for(let i=0; i<data.length; i++) {
+        ware_table.innerHTML+=`
+            <table class= seAnnoncer>
+                <tr>
+                    <td>${data[i].titel}</td>
+                    <td>${data[i].kategori}</td>
+                    <td>${data[i].pris}</td>
+                    <td>${data[i].ejer}</td>
+                    <td><img src="${data[i].billede}" style="height:50px; width:50px" /></td>
+                </tr>
+                
+            </table>
+        `;
+    }
+});
+
+//slet annonce:
+document.getElementById("sletAnnonce").addEventListener("click", () => {
+
+    let sletAnnonceData = {
+        titel: document.getElementById("sletTitel").value
+    }
+
+    //vi går ind og tager (fetcher) i det nedenstående spor:
+    fetch("/sletAnnonce", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sletAnnonceData)
+    })
+        //svaret som vi får fra fetch:
+        .then(function (data) {
+            if (data.statusText == "OK") {
+                window.alert("Annonce er nu slettet.");
+                document.location.href = "/profil";
+            } else {
+                window.alert("Du ejer ikke en annonce med denne titel.");
+            }
+        })
+}) 
 
 
-
-//Nedenfor tages fat i end-pointet /seDineAnnoncer, som gør en bruger kan se dens oprettede annoncer:
+/*Nedenfor tages fat i end-pointet /seDineAnnoncer, som gør en bruger kan se dens oprettede annoncer:
 ware_table= document.getElementById("vare_table")
 ware_table.innerHTML= `
 <tr>
@@ -151,7 +244,7 @@ fetch("/seDineAnnoncer", {
     }
 });
 
-
+/*
 
 
         /*svaret som vi får fra fetch:

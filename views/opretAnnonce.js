@@ -45,9 +45,9 @@ document.getElementById("opretAnnonce").addEventListener("click", (event) =>{
     //svaret som vi får fra fetch:
     .then(function(data) {
         if(data.statusText =="OK") {
-            window.alert("Din annonce er nu opdateret");
+            window.alert("Din annonce er nu oprettet");
             //Hvis den indtastede data er korrekt, får vi en status ok, og brugeren bliver sendt til home:
-            document.location.href="/opretAnnonce";
+            //document.location.href="/opretAnnonce";
             return
         } 
             //Hvis ikke den indtstede data er korrenkt får vi en fejlmeddelelse:

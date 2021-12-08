@@ -1,6 +1,6 @@
 //Der sendes en request til /seJacketsAnnoncer:
     
-fetch("/seJacketsAnnoncer", {
+fetch("/getJacketsAnnoncer", {
     method: "GET", 
     headers: {
         "Content-Type": "application/json", 

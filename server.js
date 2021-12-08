@@ -8,6 +8,7 @@ const formData = require("express-form-data")
 
 //Vi fortæller serven at den skal lytter på følgende port:
 const PORT = 7000;
+module.exports = app
 app.listen(PORT, () => {
     console.log(`server lytter på http://localhost:${PORT}`)
 });
